@@ -46,8 +46,8 @@ namespace TestGUI
 
         private void DoBIP39()
         {
-            //create a new BIP39 object, this in turn generates new random entropy bits
-            bip39er = new BIP39(Convert.ToInt32(entropyDrop.SelectedValue), tbPassphrase.Text, _language);
+            //create a new BIP39 object, this in turn generates new random entropy bits, note we normalise any string inputs using NFKD
+            bip39er = new BIP39(Convert.ToInt32(entropyDrop.SelectedValue), tbPassphrase.Text.Normalize(NormalizationForm.FormKD), _language);
             UpdateGUI();
         }
 
