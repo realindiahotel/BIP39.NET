@@ -36,7 +36,7 @@ namespace Bitcoin.BIP39
         public const int cBitGroupSize = 11;
         public const string cEmptyString = "";
         public const string cSaltHeader = "mnemonic"; //this is the first part of the salt as described in the BIP39 spec
-        public enum Language {English,Japanese,Spanish,Unknown};
+        public enum Language {English,Japanese,Spanish,ChineseSimplified,ChineseTraditional,Unknown};
         public const string cJPSpaceString = "\u3000"; //ideographic space used by japanese language
 
         #endregion
@@ -140,9 +140,11 @@ namespace Bitcoin.BIP39
         {
             Wordlists.English eng = new Wordlists.English();
             Wordlists.Japanese jp = new Wordlists.Japanese();
-            Wordlists.SPanish es = new Wordlists.SPanish();
+            Wordlists.Spanish es = new Wordlists.Spanish();
+            Wordlists.ChineseSimplified cnS = new Wordlists.ChineseSimplified();
+            Wordlists.ChineseTraditional cnT = new Wordlists.ChineseTraditional();
             
-            List<int> languageCount = new List<int>(new int[] {0,0,0});
+            List<int> languageCount = new List<int>(new int[] {0,0,0,0,0});
             int index;
 
             foreach(string s in words)
@@ -164,6 +166,18 @@ namespace Bitcoin.BIP39
                     //spanish is at 2
                     languageCount[2]++;
                 }
+
+                if (cnS.WordExists(s, out index))
+                {
+                    //chinese simplified is at 3
+                    languageCount[3]++;
+                }
+
+                if (cnT.WordExists(s, out index))
+                {
+                    //chinese traditional is at 4
+                    languageCount[4]++;
+                }
             }
 
             //no hits found for any language unknown
@@ -183,6 +197,14 @@ namespace Bitcoin.BIP39
             else if (languageCount.IndexOf(languageCount.Max()) == 2)
             {
                 return Language.Spanish;
+            }
+            else if (languageCount.IndexOf(languageCount.Max()) == 3)
+            {
+                return Language.ChineseSimplified;
+            }
+            else if (languageCount.IndexOf(languageCount.Max()) == 4)
+            {
+                return Language.ChineseTraditional;
             }
 
             return Language.Unknown;
@@ -303,7 +325,15 @@ namespace Bitcoin.BIP39
                 break;
 
                 case Language.Spanish:
-                wordlist = new Wordlists.SPanish();
+                wordlist = new Wordlists.Spanish();
+                break;
+
+                case Language.ChineseSimplified:
+                wordlist = new Wordlists.ChineseSimplified();
+                break;
+
+                case Language.ChineseTraditional:
+                wordlist = new Wordlists.ChineseTraditional();
                 break;
 
                 default:
@@ -371,8 +401,18 @@ namespace Bitcoin.BIP39
                     break;
 
                 case Language.Spanish:
-                    wordlist = new Wordlists.SPanish();
+                    wordlist = new Wordlists.Spanish();
                     langName = "Spanish";
+                    break;
+
+                case Language.ChineseSimplified:
+                    wordlist = new Wordlists.ChineseSimplified();
+                    langName = "Chinese Simplified";
+                    break;
+
+                case Language.ChineseTraditional:
+                    wordlist = new Wordlists.ChineseTraditional();
+                    langName = "Chinese Traditional";
                     break;
 
                 default:

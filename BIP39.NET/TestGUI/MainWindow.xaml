@@ -4,7 +4,7 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="TestGUI.MainWindow"
         Title="BIP39 Demo" Height="387" Width="715" ResizeMode="NoResize">
     <Grid Background="#FF646464">
-        <TextBox x:Name="tbPassphrase" HorizontalAlignment="Left" Height="23" Margin="80,10,0,0" TextWrapping="Wrap" Text="TREZOR" VerticalAlignment="Top" Width="402" TextChanged="tbPassphrase_TextChanged"/>
+        <TextBox x:Name="tbPassphrase" HorizontalAlignment="Left" Height="23" Margin="80,10,0,0" TextWrapping="Wrap" Text="TREZOR" VerticalAlignment="Top" Width="390" TextChanged="tbPassphrase_TextChanged"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,11,0,0" TextWrapping="Wrap" Text="Passphrase:" VerticalAlignment="Top" Foreground="White"/>
         <ComboBox x:Name="entropyDrop" HorizontalAlignment="Left" Margin="116,54,0,0" VerticalAlignment="Top" Width="70" IsReadOnly="True" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged">
             <System:UInt32>128</System:UInt32>
@@ -25,11 +25,13 @@
         <TextBlock HorizontalAlignment="Left" Margin="10,55,0,0" TextWrapping="Wrap" Text="Entropy Size (Bits):" VerticalAlignment="Top" Foreground="White"/>
         <TextBlock HorizontalAlignment="Left" Margin="200,55,0,0" TextWrapping="Wrap" Text="Word Count:" VerticalAlignment="Top" Foreground="White"/>
         <TextBlock x:Name="lblWordCount" HorizontalAlignment="Left" Margin="274,52,0,0" TextWrapping="Wrap" Text="12" VerticalAlignment="Top" Foreground="#FF179FFD" FontWeight="Bold" FontSize="16"/>
-        <TextBlock HorizontalAlignment="Left" Margin="496,11,0,0" TextWrapping="Wrap" Text="Language:" VerticalAlignment="Top" Foreground="White"/>
-        <ComboBox x:Name="langDrop" HorizontalAlignment="Left" Margin="559,10,0,0" VerticalAlignment="Top" Width="130" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged_1">
+        <TextBlock HorizontalAlignment="Left" Margin="485,11,0,0" TextWrapping="Wrap" Text="Language:" VerticalAlignment="Top" Foreground="White"/>
+        <ComboBox x:Name="langDrop" HorizontalAlignment="Left" Margin="548,10,0,0" VerticalAlignment="Top" Width="141" SelectedIndex="0" SelectionChanged="ComboBox_SelectionChanged_1">
             <System:String>English</System:String>
             <System:String>Japanese</System:String>
             <System:String>Spanish</System:String>
+            <System:String>Chinese (Simplified)</System:String>
+            <System:String>Chinese (Traditional)</System:String>
         </ComboBox>
         <TextBox x:Name="tbMnemonicScentence" HorizontalAlignment="Left" Height="102" Margin="10,116,0,0" VerticalAlignment="Top" Width="679" IsReadOnly="True" TextWrapping="WrapWithOverflow"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,94,0,0" TextWrapping="Wrap" Text="Mnemonic Sentence:" VerticalAlignment="Top" Foreground="White"/>

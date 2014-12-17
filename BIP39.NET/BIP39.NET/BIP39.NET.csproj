@@ -36,6 +36,8 @@
   <ItemGroup>
     <Compile Include="BIP39.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Wordlists\ChineseSimplified.cs" />
+    <Compile Include="Wordlists\ChineseTraditional.cs" />
     <Compile Include="Wordlists\English.cs" />
     <Compile Include="Wordlists\Japanese.cs" />
     <Compile Include="Wordlists\Spanish.cs" />
