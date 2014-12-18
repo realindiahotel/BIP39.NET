@@ -7,7 +7,7 @@ C# (PCL) implementation of the BIP39 Bitcoin Improvement Proposal Document https
 
 I have included a test GUI which shows you how to use the BIP39 class.
 
-I have created unit tests that test against the English test vectors posted here https://raw.githubusercontent.com/trezor/python-mnemonic/master/vectors.json as long as Japanese and Spanish strings are UTF8 NFKD normalised (I would do this for you but PCL does not contain String.Normalize()) they should be fine as the code is true to the English test vectors.
+I have created unit tests that test against the English and Japanese test vectors posted here https://raw.githubusercontent.com/trezor/python-mnemonic/master/vectors.json and here https://github.com/Thashiznets/bip32JP.github.io/blob/patch-1/test_JP_BIP39.json as long as strings are UTF8 NFKD normalised (I would do this for you but PCL does not contain String.Normalize()) all will be well :)
 
 PBKDF2-HMACSHA512 functionality provided by my PWDTK.NET project, it is a slightly modified variant of the rfc2898 class when compared to PWDTK.NET as the BIP39 spec has us use the mnemonic sentence as the hmac key and then we just hash the word "mnemonic"+[user-supplied-passphrase] for 2048 iterations, whereas PWDTK.NET would have you use the passphrase as the hmac key and hash the mnemonic sentence + crypto random salt over x iterations. Six to one Half Dozen to the other really as all are creating irreversible bits with stretching as is the aim.
 
