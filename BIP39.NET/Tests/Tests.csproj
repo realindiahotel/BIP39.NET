@@ -53,6 +53,7 @@
     <Compile Include="TestMnemonicsAndSeedEnglish.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestAutoLanguageDetect.cs" />
+    <Compile Include="TestMnemonicsAndSeedJapanese.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\BitcoinUtilities.NET\BitcoinUtilities.NET\BitcoinUtilities.NET\BitcoinUtilities.NET.csproj">

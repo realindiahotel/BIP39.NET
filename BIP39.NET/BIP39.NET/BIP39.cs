@@ -173,7 +173,7 @@ namespace Bitcoin.BIP39
                     languageCount[3]++;
                 }
 
-                if (cnT.WordExists(s, out index))
+                if (cnT.WordExists(s, out index) && ! cnS.WordExists(s, out index))
                 {
                     //chinese traditional is at 4
                     languageCount[4]++;
@@ -200,6 +200,12 @@ namespace Bitcoin.BIP39
             }
             else if (languageCount.IndexOf(languageCount.Max()) == 3)
             {
+                if (languageCount[4]>0)
+                {
+                    //has traditional characters so not simplified but instead traditional
+                    return Language.ChineseTraditional;
+                }
+
                 return Language.ChineseSimplified;
             }
             else if (languageCount.IndexOf(languageCount.Max()) == 4)

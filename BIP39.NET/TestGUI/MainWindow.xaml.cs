@@ -46,7 +46,7 @@ namespace TestGUI
 
         private void DoBIP39()
         {
-            //create a new BIP39 object, this in turn generates new random entropy bits, note we normalise any string inputs using NFKD
+            //create a new BIP39 object, this in turn generates new random entropy bits, note we normalise any string inputs using UTF8 NFKD
             bip39er = new BIP39(Convert.ToInt32(entropyDrop.SelectedValue), tbPassphrase.Text.Normalize(NormalizationForm.FormKD), _language);
             UpdateGUI();
         }
@@ -103,7 +103,7 @@ namespace TestGUI
             if (!init)
             {
                 //set the passphrase to use on the BIP39 object
-                bip39er.Passphrase = tbPassphrase.Text;
+                bip39er.Passphrase = tbPassphrase.Text.Normalize(NormalizationForm.FormKD); //remember any string inputs are always UTF8-NFKD Normalised
 
                 //refreshing the GUI forces the BIP39 object to report it's values using the new passphrase
                 UpdateGUI();
