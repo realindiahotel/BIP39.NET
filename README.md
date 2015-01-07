@@ -3,11 +3,13 @@ BIP39.NET
 
 C# (PCL) implementation of the BIP39 Bitcoin Improvement Proposal Document https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki
 
+This PCL is targeted for Universal Apps (Windows 8.1/Windows Phone 8.1) and .NET 4.5.1 ONLY. No support for Windows 8 or Windows Phone 8/8.1 Silverlight apps
+
 ### PLEASE ENSURE YOU ALSO DOWNLOAD, BUILD AND REFERENCE THE BitcoinUtilities.NET PROJECT LOCATED HERE: https://github.com/Thashiznets/BitcoinUtilities.NET ###
 
 I have included a test GUI which shows you how to use the BIP39 class.
 
-I have created unit tests that test against the English and Japanese test vectors posted here https://raw.githubusercontent.com/trezor/python-mnemonic/master/vectors.json and here https://github.com/Thashiznets/bip32JP.github.io/blob/patch-1/test_JP_BIP39.json as long as strings are UTF8 NFKD normalised (I would do this for you but PCL does not contain String.Normalize()) all will be well :)
+I have created unit tests that test against the English and Japanese test vectors posted here https://raw.githubusercontent.com/trezor/python-mnemonic/master/vectors.json and here https://github.com/Thashiznets/bip32JP.github.io/blob/patch-1/test_JP_BIP39.json
 
 PBKDF2-HMACSHA512 functionality provided by my PWDTK.NET project, it is a slightly modified variant of the rfc2898 class when compared to PWDTK.NET as the BIP39 spec has us use the mnemonic sentence as the hmac key and then we just hash the word "mnemonic"+[user-supplied-passphrase] for 2048 iterations, whereas PWDTK.NET would have you use the passphrase as the hmac key and hash the mnemonic sentence + crypto random salt over x iterations. Six to one Half Dozen to the other really as all are creating irreversible bits with stretching as is the aim.
 
