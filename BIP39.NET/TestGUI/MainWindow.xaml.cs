@@ -24,8 +24,6 @@ namespace TestGUI
         BIP39.Language _language = BIP39.Language.English;
         BIP39 bip39er;
         bool init = true;
-        //wider space for jp language
-        char japSpace = Char.Parse(BIP39.cJPSpaceString);
            
         public MainWindow()
         {
@@ -46,8 +44,8 @@ namespace TestGUI
 
         private void DoBIP39()
         {
-            //create a new BIP39 object, this in turn generates new random entropy bits, note we normalise any string inputs using UTF8 NFKD
-            bip39er = new BIP39(Convert.ToInt32(entropyDrop.SelectedValue), tbPassphrase.Text.Normalize(NormalizationForm.FormKD), _language);
+            //create a new BIP39 object, this in turn generates new random entropy bits
+            bip39er = new BIP39(Convert.ToInt32(entropyDrop.SelectedValue), tbPassphrase.Text, _language);
             UpdateGUI();
         }
 
@@ -55,13 +53,7 @@ namespace TestGUI
         {
             //reads values from the BIP39 object and reports them via the GUI
             lblWordCount.Text = bip39er.WordCountFromEntropy.ToString();
-            String mnemonicSentence = bip39er.MnemonicSentence;
-            if(bip39er.WordlistLanguage.Equals(BIP39.Language.Japanese))
-            {
-               
-                mnemonicSentence = mnemonicSentence.Replace(' ',japSpace );
-            }
-            tbMnemonicScentence.Text = mnemonicSentence;
+            tbMnemonicScentence.Text = bip39er.MnemonicSentence;
             tbSeedBytesHex.Text = bip39er.SeedBytesHexString;
         }
 
@@ -103,7 +95,7 @@ namespace TestGUI
             if (!init)
             {
                 //set the passphrase to use on the BIP39 object
-                bip39er.Passphrase = tbPassphrase.Text.Normalize(NormalizationForm.FormKD); //remember any string inputs are always UTF8-NFKD Normalised
+                bip39er.Passphrase = tbPassphrase.Text;
 
                 //refreshing the GUI forces the BIP39 object to report it's values using the new passphrase
                 UpdateGUI();

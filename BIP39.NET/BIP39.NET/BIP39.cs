@@ -11,7 +11,7 @@ namespace Bitcoin.BIP39
     /// A .NET implementation of the Bitcoin Improvement Proposal - 39 (BIP39)
     /// BIP39 specification used as reference located here: https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki
     /// Made by thashiznets@yahoo.com.au
-    /// v1.0.1.0
+    /// v1.0.1.1
     /// I ♥ Bitcoin :)
     /// Bitcoin:1ETQjMkR1NNh4jwLuN5LxY7bMsHC9PUPSV
     /// </summary>
@@ -87,21 +87,8 @@ namespace Bitcoin.BIP39
         /// <param name="language">Optional language to use for wordlist, if not specified it will auto detect language and if it can't detect it will default to English</param>
         public BIP39(string mnemonicSentence, string passphrase = cEmptyString, Language language=Language.Unknown)
         {
-            _mnemonicSentence = mnemonicSentence.Trim(); //just making sure we don't have any leading or trailing spaces
-            
-            char jpSpace;
-
-            if (Char.TryParse(cJPSpaceString, out jpSpace))
-            {
-                //make sure we convert japanese spaces to normal spaces
-                _mnemonicSentence = _mnemonicSentence.Replace(jpSpace, ' ');
-            }
-            else
-            {
-                throw new Exception("Error checking for ideographic spaces");
-            }
-
-            _passphraseBytes = UTF8Encoding.UTF8.GetBytes(passphrase);
+            _mnemonicSentence = Utilities.NormaliseStringNfkd(mnemonicSentence.Trim()); //just making sure we don't have any leading or trailing spaces
+            _passphraseBytes = UTF8Encoding.UTF8.GetBytes(Utilities.NormaliseStringNfkd(passphrase));
             string[] words = _mnemonicSentence.Split(new char[] { ' ' });
 
             //no language specified try auto detect it
@@ -224,19 +211,8 @@ namespace Bitcoin.BIP39
         /// <returns>Seed bytes that can be used to create a root in BIP32</returns>
         public static byte[] GetSeedBytes(string mnemonicSentence, string passphrase=cEmptyString)
         {
-            char jpSpace;
-
-            if (Char.TryParse(cJPSpaceString, out jpSpace))
-            {
-                //make sure we convert japanese spaces to normal spaces
-                mnemonicSentence = mnemonicSentence.Replace(jpSpace, ' ');
-            }
-            else
-            {
-                throw new Exception("Error checking for ideographic spaces");
-            }
-
-            byte[] salt = Utilities.MergeByteArrays(UTF8Encoding.UTF8.GetBytes(cSaltHeader), UTF8Encoding.UTF8.GetBytes(passphrase));
+            mnemonicSentence = Utilities.NormaliseStringNfkd(mnemonicSentence);
+            byte[] salt = Utilities.MergeByteArrays(UTF8Encoding.UTF8.GetBytes(cSaltHeader), UTF8Encoding.UTF8.GetBytes(Utilities.NormaliseStringNfkd(passphrase)));
             return Rfc2898_pbkdf2_hmacsha512.PBKDF2(UTF8Encoding.UTF8.GetBytes(mnemonicSentence), salt);
         }
 
@@ -248,7 +224,8 @@ namespace Bitcoin.BIP39
         /// <returns>Hex string encoded seed bytes that can be used to create a root in BIP32</returns>
         public static string GetSeedBytesHexString(string mnemonicSentence, string passphrase = cEmptyString)
         {
-            byte[] salt = Utilities.MergeByteArrays(UTF8Encoding.UTF8.GetBytes(cSaltHeader), UTF8Encoding.UTF8.GetBytes(passphrase));
+            mnemonicSentence = Utilities.NormaliseStringNfkd(mnemonicSentence);
+            byte[] salt = Utilities.MergeByteArrays(UTF8Encoding.UTF8.GetBytes(cSaltHeader), UTF8Encoding.UTF8.GetBytes(Utilities.NormaliseStringNfkd(passphrase)));
             return Utilities.BytesToHexString(Rfc2898_pbkdf2_hmacsha512.PBKDF2(UTF8Encoding.UTF8.GetBytes(mnemonicSentence), salt));
         }
 
@@ -261,7 +238,7 @@ namespace Bitcoin.BIP39
         /// </summary>
         private void pInit(String passphrase, Language language)
         {
-            _passphraseBytes = UTF8Encoding.UTF8.GetBytes(passphrase);
+            _passphraseBytes = UTF8Encoding.UTF8.GetBytes(Utilities.NormaliseStringNfkd(passphrase));
             _language = language;
             byte[] allChecksumBytes = Utilities.Sha256Digest(_entropyBytes,0,_entropyBytes.Length); //sha256 the entropy bytes to get all the checksum bits
             
@@ -608,7 +585,7 @@ namespace Bitcoin.BIP39
         {
             set
             {
-                _passphraseBytes = UTF8Encoding.UTF8.GetBytes(value);
+                _passphraseBytes = UTF8Encoding.UTF8.GetBytes(Utilities.NormaliseStringNfkd(value));
             }
         }
         
@@ -619,7 +596,16 @@ namespace Bitcoin.BIP39
         {
             get
             {
-                return _mnemonicSentence;
+                String outputMnemonic = _mnemonicSentence;
+
+                if(_language.Equals(Language.Japanese))
+                {
+                    char japSpace;
+                    Char.TryParse(cJPSpaceString, out japSpace);
+                    outputMnemonic = outputMnemonic.Replace(' ', japSpace);
+                }
+                
+                return outputMnemonic;
             }
         }
 
@@ -650,7 +636,7 @@ namespace Bitcoin.BIP39
             {
                 //literally this is the bulk of the decoupled seed generation code, easy.
                 byte[] salt = Utilities.MergeByteArrays(UTF8Encoding.UTF8.GetBytes(cSaltHeader),_passphraseBytes);
-                return Rfc2898_pbkdf2_hmacsha512.PBKDF2(UTF8Encoding.UTF8.GetBytes(MnemonicSentence), salt);
+                return Rfc2898_pbkdf2_hmacsha512.PBKDF2(UTF8Encoding.UTF8.GetBytes(Utilities.NormaliseStringNfkd(MnemonicSentence)), salt);
             }
         }
 
