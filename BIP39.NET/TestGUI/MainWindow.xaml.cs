@@ -29,24 +29,25 @@ namespace TestGUI
         {
             InitializeComponent();
             init = false;
-            //create an initial BIP39 object to display values on first open of GUI
-            DoBIP39();
+            //create an initial BIP39 object to display values on first open of GUI  
+            bip39er = new BIP39(Convert.ToInt32(entropyDrop.SelectedValue), tbPassphrase.Text, _language);
+            UpdateGUI();
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!init)
             {
                 //create new BIP39 object with new entropy bits
-                DoBIP39();
+                bip39er = await DoBIP39();
+                UpdateGUI();
             }
         }
 
-        private void DoBIP39()
+        private async Task<BIP39> DoBIP39()
         {
             //create a new BIP39 object, this in turn generates new random entropy bits
-            bip39er = new BIP39(Convert.ToInt32(entropyDrop.SelectedValue), tbPassphrase.Text, _language);
-            UpdateGUI();
+            return await BIP39.GetBIP39Async(Convert.ToInt32(entropyDrop.SelectedValue), tbPassphrase.Text, _language);
         }
 
         private void UpdateGUI()
@@ -103,10 +104,11 @@ namespace TestGUI
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
             //create a new BIP39 object therefore new entropy bits
-            DoBIP39();
+           bip39er = await DoBIP39();
+           UpdateGUI();
         }
 
         private void TextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

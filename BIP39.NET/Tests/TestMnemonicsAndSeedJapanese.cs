@@ -384,5 +384,13 @@ namespace Tests
         {
             Assert.AreEqual("346b7321d8c04f6f37b49fdf062a2fddc8e1bf8f1d33171b65074531ec546d1d3469974beccb1a09263440fc92e1042580a557fdce314e27ee4eabb25fa5e5fe", BIP39.GetSeedBytesHexString(("うちゅう ふそく ひしょ がちょう うけもつ めいそう みかん そざい いばる うけとる さんま さこつ おうさま ぱんつ しひょう めした たはつ いちぶ つうじょう てさぎょう きつね みすえる いりぐち かめれおん").Normalize(NormalizationForm.FormKD), "㍍ガバヴァぱばぐゞちぢ十人十色"));
         }
+
+        [TestMethod]
+        public void JapTest27()
+        {
+            BIP39 madeFromAsyncStatic = BIP39.GetBIP39Async(256, "TREZOR", BIP39.Language.Japanese).Result;
+            BIP39 madeNormally = new BIP39(madeFromAsyncStatic.EntropyBytes, "TREZOR", BIP39.Language.Japanese);
+            Assert.AreEqual(madeFromAsyncStatic.SeedBytesHexString, madeNormally.SeedBytesHexString);
+        }
     }
 }

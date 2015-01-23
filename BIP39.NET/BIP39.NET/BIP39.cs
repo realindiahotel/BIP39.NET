@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Bitcoin.BitcoinUtilities;
 
 namespace Bitcoin.BIP39
@@ -119,7 +120,20 @@ namespace Bitcoin.BIP39
         #region Public Static Methods
 
         /// <summary>
-        /// This method takes in a string[] of words and detects the language that has the highest number of matching words.
+        /// An asynchronous static method to create a new BIP39 from random entropy. The random entropy creation is CPU intensive so is run in its own Task and we await as per async pattern.
+        /// </summary>
+        /// <param name="entropySize">The size in bits of the entropy to be created</param>
+        /// <param name="passphrase">The optional passphrase. Please ensure NFKD Normalized, Empty string will be used if not provided as per spec</param>
+        /// <param name="language">The optional language. If no language is provided English will be used</param>
+        /// <returns>A BIP39 object</returns>
+        public static async Task<BIP39> GetBIP39Async(int entropySize = cMinimumEntropyBits, string passphrase = cEmptyString, Language language = Language.English)
+        {
+            byte[] entropyBytes = await Utilities.GetRandomBytesAsync(entropySize / cBitsInByte);
+            return new BIP39(entropyBytes, passphrase, language);
+        }
+
+        /// <summary>
+        /// Takes in a string[] of words and detects the language that has the highest number of matching words.
         /// </summary>
         /// <param name="words">The words of which you wish to derive a language</param>
         /// <returns>The best attempt at a guessed Language</returns>
@@ -234,7 +248,7 @@ namespace Bitcoin.BIP39
         #region Private Methods
 
         /// <summary>
-        /// This is common init code utilised by all the constructors. It gets all the bits and does a checksum etc. This is the main code to create a BIP39 object.
+        /// Common initialisation code utilised by all the constructors. It gets all the bits and does a checksum etc. This is the main code to create a BIP39 object.
         /// </summary>
         private void pInit(String passphrase, Language language)
         {
@@ -283,7 +297,7 @@ namespace Bitcoin.BIP39
         }
 
         /// <summary>
-        /// This method uses the Wordlist Index to create a scentence ow words provided by the wordlist of this objects language attribute
+        /// Uses the Wordlist Index to create a scentence ow words provided by the wordlist of this objects language attribute
         /// </summary>
         /// <returns>A scentence of words</returns>
         private string pGetMnemonicSentence()
@@ -360,7 +374,7 @@ namespace Bitcoin.BIP39
         }
 
         /// <summary>
-        /// This method takes in the words of a mnemonic sentence and it rebuilds the word index, having the valid index allows us to hot swap between languages/word lists :)
+        /// Takes in the words of a mnemonic sentence and it rebuilds the word index, having the valid index allows us to hot swap between languages/word lists :)
         /// </summary>
         /// <param name="wordsInMnemonicSentence"> a string array containing each word in the mnemonic sentence</param>
         /// <returns>The word index that can be used to build the mnemonic sentence</returns>
@@ -420,7 +434,7 @@ namespace Bitcoin.BIP39
         }
 
         /// <summary>
-        /// This is me encoding an integer between 0 and 2047 from 11 bits...
+        /// Me encoding an integer between 0 and 2047 from 11 bits...
         /// </summary>
         /// <param name="bits">The bits to encode into an integer</param>
         /// <returns>integer between 0 and 2047</returns>
@@ -450,7 +464,7 @@ namespace Bitcoin.BIP39
         }
 
         /// <summary>
-        /// This method takes the word index and decodes it from our 11 bit integer encoding back into raw bits including CS. Then it removes CS bits and turns back into entropy bytes
+        /// Takes the word index and decodes it from our 11 bit integer encoding back into raw bits including CS. Then it removes CS bits and turns back into entropy bytes
         /// </summary>
         /// <param name="wordIndex">The word index to convert back to bits then bytes</param>
         /// <returns>entropy bytes excluding CS</returns>
@@ -574,12 +588,12 @@ namespace Bitcoin.BIP39
         {
             get
             {
-                return _entropyBytes;
+                return Utilities.SwapEndianBytes(_entropyBytes);
             }
         }
 
         /// <summary>
-        /// Sets the pasphrase, Please ensure NFKD Normalized, this lets us use the same entropy bits to derive many seeds based on different passphrases
+        /// Sets the pasphrase, this lets us use the same entropy bits to derive many seeds based on different passphrases
         /// </summary>
         public string Passphrase
         {
