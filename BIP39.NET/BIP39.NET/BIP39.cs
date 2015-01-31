@@ -291,7 +291,7 @@ namespace Bitcoin.BIP39
                 index++;
             }
 
-            _wordIndexList = pGetWordIndexes(entropyConcatChecksumBits);
+            _wordIndexList = pGetWordIndeces(entropyConcatChecksumBits);
             _mnemonicSentence = pGetMnemonicSentence();
    
         }
@@ -354,7 +354,7 @@ namespace Bitcoin.BIP39
         /// Process entropy + CS into an index list of words to get from wordlist
         /// </summary>
         /// <returns>An index, each int is a line in the wiordlist for the language of choice</returns>
-        private List<int> pGetWordIndexes(BitArray entropyConcatChecksumBits)
+        private List<int> pGetWordIndeces(BitArray entropyConcatChecksumBits)
         {
             List<int> wordIndexList = new List<int>();
 
