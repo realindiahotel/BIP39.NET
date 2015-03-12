@@ -23,7 +23,7 @@ namespace Bitcoin.BIP39
         private byte[] _entropyBytes;        
         private byte[] _passphraseBytes;
         private Language _language;
-        private List<int> _wordIndexList; //I made this an attribute because then we can keep the same index and swap between languages for experimenting
+        private List<int> _wordIndexList; //I made this a property because then we can keep the same index and swap between languages for experimenting
         private string _mnemonicSentence;
 
         #endregion
