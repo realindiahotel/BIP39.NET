@@ -78,6 +78,10 @@ namespace TestGUI
                 {
                     _language = BIP39.Language.ChineseTraditional;
                 }
+                else if (langDrop.SelectedIndex == 5)
+                {
+                    _language = BIP39.Language.French;
+                }
                 else
                 {
                     _language = BIP39.Language.English;

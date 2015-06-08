@@ -37,7 +37,7 @@ namespace Bitcoin.BIP39
         public const int cBitGroupSize = 11;
         public const string cEmptyString = "";
         public const string cSaltHeader = "mnemonic"; //this is the first part of the salt as described in the BIP39 spec
-        public enum Language {English,Japanese,Spanish,ChineseSimplified,ChineseTraditional,Unknown};
+        public enum Language {English,Japanese,Spanish,ChineseSimplified,ChineseTraditional,French,Unknown};
         public const string cJPSpaceString = "\u3000"; //ideographic space used by japanese language
 
         #endregion
@@ -142,10 +142,11 @@ namespace Bitcoin.BIP39
             Wordlists.English eng = new Wordlists.English();
             Wordlists.Japanese jp = new Wordlists.Japanese();
             Wordlists.Spanish es = new Wordlists.Spanish();
+            Wordlists.French fr = new Wordlists.French();
             Wordlists.ChineseSimplified cnS = new Wordlists.ChineseSimplified();
             Wordlists.ChineseTraditional cnT = new Wordlists.ChineseTraditional();
             
-            List<int> languageCount = new List<int>(new int[] {0,0,0,0,0});
+            List<int> languageCount = new List<int>(new int[] {0,0,0,0,0,0});
             int index;
 
             foreach(string s in words)
@@ -178,6 +179,12 @@ namespace Bitcoin.BIP39
                 {
                     //chinese traditional is at 4
                     languageCount[4]++;
+                }
+
+                if (fr.WordExists(s, out index))
+                {
+                    //french is at 5
+                    languageCount[5]++;
                 }
             }
 
@@ -212,6 +219,10 @@ namespace Bitcoin.BIP39
             else if (languageCount.IndexOf(languageCount.Max()) == 4)
             {
                 return Language.ChineseTraditional;
+            }
+            else if (languageCount.IndexOf(languageCount.Max()) == 5)
+            {
+                return Language.French;
             }
 
             return Language.Unknown;
@@ -313,29 +324,33 @@ namespace Bitcoin.BIP39
 
             switch(_language)
             {
-               case Language.English:
-                wordlist = new Wordlists.English();
-                break;
+                case Language.English:
+                    wordlist = new Wordlists.English();
+                    break;
 
                 case Language.Japanese:
-                wordlist = new Wordlists.Japanese();
-                break;
+                    wordlist = new Wordlists.Japanese();
+                    break;
 
                 case Language.Spanish:
-                wordlist = new Wordlists.Spanish();
-                break;
+                    wordlist = new Wordlists.Spanish();
+                    break;
 
                 case Language.ChineseSimplified:
-                wordlist = new Wordlists.ChineseSimplified();
-                break;
+                    wordlist = new Wordlists.ChineseSimplified();
+                    break;
 
                 case Language.ChineseTraditional:
-                wordlist = new Wordlists.ChineseTraditional();
-                break;
+                    wordlist = new Wordlists.ChineseTraditional();
+                    break;
+
+                case Language.French:
+                    wordlist = new Wordlists.French();
+                    break;
 
                 default:
-                wordlist = new Wordlists.English();
-                break;
+                    wordlist = new Wordlists.English();
+                    break;
             }
 
             for(int i =0; i<_wordIndexList.Count;i++)
@@ -410,6 +425,11 @@ namespace Bitcoin.BIP39
                 case Language.ChineseTraditional:
                     wordlist = new Wordlists.ChineseTraditional();
                     langName = "Chinese Traditional";
+                    break;
+
+                case Language.French:
+                    wordlist = new Wordlists.French();
+                    langName = "French";
                     break;
 
                 default:
