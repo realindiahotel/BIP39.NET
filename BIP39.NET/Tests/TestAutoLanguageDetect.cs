@@ -38,6 +38,12 @@ namespace Tests
         }
 
         [TestMethod]
+        public void TestKnownFrench()
+        {
+            Assert.AreEqual(BIP39.Language.French, BIP39.AutoDetectLanguageOfWords(new string[] { "abaisser", "brutal", "bulletin", "circuler", "citoyen", "impact", "joyeux", "massif", "nébuleux" }));
+        }
+
+        [TestMethod]
         public void TestKnownUnknown()
         {
             Assert.AreEqual(BIP39.Language.Unknown, BIP39.AutoDetectLanguageOfWords(new string[] { "gffgfg", "khjkjk", "kjkkj" }));
